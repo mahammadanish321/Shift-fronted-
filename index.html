@@ -1,11 +1,429 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Shift | Reframe Reality</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #0a0a0a;
+            --text: #ffffff;
+            --accent: #ebff00;
+            --secondary: #888;
+            --angle: -3deg;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Space Grotesk', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* --- NAVIGATION --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 4rem;
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.5rem;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            margin-left: 2rem;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: linear-gradient(177deg, #0a0a0a 50%, #111 50%);
+            padding-top: 80px;
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 10;
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-size: 12vw;
+            line-height: 0.85;
+            text-transform: uppercase;
+            letter-spacing: -0.05em;
+            text-shadow: 4px 4px 0px transparent, -2px -2px 0px var(--accent);
+            opacity: 0.9;
+        }
+
+        h1 span {
+            display: block;
+            transform: translateX(10%);
+            color: transparent;
+            -webkit-text-stroke: 2px var(--text);
+        }
+
+        .tagline {
+            margin-top: 2rem;
+            font-size: 1.5rem;
+            color: var(--secondary);
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        /* --- THE VIDEO SCANNER --- */
+        .scanner-container {
+            width: 600px;
+            /* Made wider for video aspect ratio */
+            height: 338px;
+            /* 16:9 Aspect Ratio */
+            position: relative;
+            margin-top: 2rem;
+            background: #000;
+            /* Center the video processing look */
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+        }
+
+        /* The actual video element */
+        .demo-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.8;
+            /* Slight dim to make UI pop */
+            filter: grayscale(20%) contrast(120%);
+            /* Tech look */
+        }
+
+        /* Overlay Elements (Z-Index ensures they stay ON TOP of video) */
+        .corner {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--accent);
+            z-index: 5;
+            transition: all 0.3s ease;
+        }
+
+        /* Hover effect: Corners expand */
+        .scanner-container:hover .corner {
+            width: 50px;
+            height: 50px;
+            box-shadow: 0 0 15px var(--accent);
+        }
+
+        .tl {
+            top: -2px;
+            left: -2px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .tr {
+            top: -2px;
+            right: -2px;
+            border-left: none;
+            border-bottom: none;
+        }
+
+        .bl {
+            bottom: -2px;
+            left: -2px;
+            border-right: none;
+            border-top: none;
+        }
+
+        .br {
+            bottom: -2px;
+            right: -2px;
+            border-left: none;
+            border-top: none;
+        }
+
+        .scan-line {
+            width: 100%;
+            height: 2px;
+            background: var(--accent);
+            box-shadow: 0 0 10px var(--accent);
+            position: absolute;
+            top: 0;
+            z-index: 4;
+            animation: scan 4s ease-in-out infinite;
+        }
+
+        .scan-text {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: monospace;
+            color: var(--accent);
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 5px 10px;
+            z-index: 5;
+        }
+
+        @keyframes scan {
+            0% {
+                top: 0;
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                top: 100%;
+                opacity: 0;
+            }
+        }
+
+        /* --- MARQUEE --- */
+        .marquee {
+            background: var(--accent);
+            color: var(--bg);
+            padding: 1rem 0;
+            transform: rotate(var(--angle));
+            width: 120%;
+            margin-left: -10%;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+            z-index: 5;
+            margin-top: 4rem;
+        }
+
+        .marquee-content {
+            display: inline-block;
+            font-size: 3rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            animation: scroll 20s linear infinite;
+        }
+
+        @keyframes scroll {
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* --- DETAILS SECTION --- */
+        .details {
+            padding: 10rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 4rem;
+        }
+
+        .feature h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            border-left: 3px solid var(--accent);
+            padding-left: 1rem;
+        }
+
+        .feature p {
+            color: var(--secondary);
+            line-height: 1.6;
+        }
+
+        /* --- CTA --- */
+        .cta {
+            text-align: center;
+            padding: 8rem 2rem;
+            border-top: 1px solid #222;
+            background: #0f0f0f;
+        }
+
+        .cta h2 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .input-group {
+            display: inline-flex;
+            border: 1px solid var(--secondary);
+            padding: 0.5rem;
+            border-radius: 50px;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .input-group input {
+            background: transparent;
+            border: none;
+            color: white;
+            padding: 1rem;
+            flex-grow: 1;
+            font-family: inherit;
+            outline: none;
+        }
+
+        .btn-submit {
+            background: var(--text);
+            color: var(--bg);
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            text-decoration: none;
+            font-weight: 700;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-submit:hover {
+            background: var(--accent);
+            transform: scale(1.05);
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 18vw;
+            }
+
+            .scanner-container {
+                width: 90%;
+                height: auto;
+                aspect-ratio: 16/9;
+            }
+
+            .details {
+                padding: 4rem 2rem;
+            }
+
+            .input-group {
+                flex-direction: column;
+                border: none;
+            }
+
+            .input-group input {
+                border-bottom: 1px solid #333;
+                margin-bottom: 1rem;
+                text-align: center;
+            }
+
+            .btn-submit {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
+
 <body>
-    
+
+    <nav>
+        <div class="logo">Shift.</div>
+        <div class="nav-links">
+            <a href="#">Features</a>
+            <a href="#">Login</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Reframing <br><span>Reality</span></h1>
+            <p class="tagline">The web-based AI tool that moves the camera <i>after</i> the shot.</p>
+        </div>
+
+        <div class="scanner-container">
+            <div class="corner tl"></div>
+            <div class="corner tr"></div>
+            <div class="corner bl"></div>
+            <div class="corner br"></div>
+            <div class="scan-line"></div>
+            <div class="scan-text">PROCESSING GEOMETRY</div>
+
+            <video class="demo-video" autoplay loop muted playsinline>
+                <source src="InShot_20251231_115634151.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+
+    </section>
+
+    <div class="marquee">
+        <div class="marquee-content">
+            FIX PERSPECTIVE • CORRECT HORIZONS • CHANGE THE ANGLE • SHIFT YOUR VIEW • BROWSER BASED • NO INSTALL
+            REQUIRED •
+        </div>
+    </div>
+
+    <section class="details">
+        <div class="feature">
+            <h3>Dutch Angle?</h3>
+            <p>Accidentally tilted your phone? Shift reconstructs the scene geometry to level the horizon without
+                cropping out the details.</p>
+        </div>
+        <div class="feature">
+            <h3>Web Based</h3>
+            <p>No downloads needed. Upload your image directly to our secure cloud, adjust the perspective, and export
+                in 4K.</p>
+        </div>
+        <div class="feature">
+            <h3>Lens Distortion</h3>
+            <p>Wide angle lenses stretch faces. Shift compresses and realigns subject proportions to look natural and
+                professional.</p>
+        </div>
+    </section>
+
+    <section class="cta">
+        <h2>Get Early Access</h2>
+        <p style="color:#888; margin-bottom: 2rem;">We are launching the beta soon. Join the list.</p>
+        <div class="input-group">
+            <input type="email" placeholder="Enter your email address">
+            <button class="btn-submit">Join Waitlist</button>
+        </div>
+    </section>
+
 </body>
+
 </html>
