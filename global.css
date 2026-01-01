@@ -1,0 +1,399 @@
+/* --- global.css --- */
+:root {
+    /* Light Theme (Default) */
+    --bg-color: #fcfbf7;
+    --panel-bg: #ffffff;
+    --text-main: #333333;
+    --text-muted: #666666;
+    --border: #e0e0e0;
+    --accent-blue: #2d6cdf;
+    --accent-red: #ff4f4f;
+    --dropdown-bg: #ffffff;
+    --dropdown-hover: #f5f5f5;
+
+    --font-family: 'Space Grotesk', sans-serif;
+}
+
+[data-theme="dark"] {
+    /* Dark Theme (Professional Slate) */
+    --bg-color: #0f172a;
+    --panel-bg: #1e293b;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --border: #334155;
+    --accent-blue: #60a5fa;
+    --accent-red: #f87171;
+    --dropdown-bg: #1e293b;
+    --dropdown-hover: #334155;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- HEADER --- */
+header {
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 25px;
+    background-color: var(--bg-color);
+    flex-shrink: 0;
+    z-index: 100;
+}
+
+.logo {
+    font-family: 'Brush Script MT', cursive;
+    font-size: 32px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #000;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Token Counter */
+.token-pill {
+    background: var(--panel-bg);
+    border: 1px solid var(--border);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.token-icon {
+    color: #f1c40f;
+}
+
+/* Profile & Dropdown */
+.profile-container {
+    position: relative;
+    cursor: pointer;
+}
+
+.user-pill {
+    display: flex;
+    align-items: center;
+    background: #8ba6d6;
+    padding: 4px 12px 4px 4px;
+    border-radius: 20px;
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+.user-pill:hover {
+    background: #7a95c5;
+}
+
+.avatar {
+    width: 32px;
+    height: 32px;
+    background: #ccc url('https://i.pravatar.cc/150?img=11') center/cover;
+    border-radius: 50%;
+    margin-right: 8px;
+    border: 2px solid white;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 45px;
+    right: 0;
+    background: var(--dropdown-bg);
+    width: 180px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    z-index: 1000;
+}
+
+.dropdown-menu.active {
+    display: block;
+}
+
+.dropdown-item {
+    padding: 12px 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-main);
+    text-decoration: none;
+    font-size: 14px;
+    transition: background 0.1s;
+}
+
+.dropdown-item:hover {
+    background: var(--dropdown-hover);
+}
+
+.dropdown-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 0;
+}
+
+.text-red {
+    color: var(--accent-red);
+}
+
+/* --- CONTROLLER --- */
+.controller-col {
+    background: var(--panel-bg);
+    border-radius: 25px;
+    border: 1px solid var(--border);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.control-grid {
+    display: grid;
+    grid-template-columns: 50px 1fr;
+    grid-template-rows: 1fr 50px;
+    gap: 10px;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-items: center;
+}
+
+/* Sliders */
+.slider-v-wrap {
+    grid-row: 1;
+    grid-column: 1;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+input.v-slider {
+    -webkit-appearance: none;
+    background: #eee;
+    height: 8px;
+    width: 240px;
+    border-radius: 5px;
+    outline: none;
+    transform: rotate(-90deg);
+    cursor: pointer;
+}
+
+.slider-h-wrap {
+    grid-row: 2;
+    grid-column: 2;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+input.h-slider {
+    -webkit-appearance: none;
+    background: #eee;
+    height: 8px;
+    width: 90%;
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+}
+
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    background: var(--accent-red);
+    border: 3px solid white;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* --- 3D DIAL STYLES --- */
+.dial-area {
+    grid-row: 1;
+    grid-column: 2;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dial-wrapper {
+    width: 220px;
+    height: 220px;
+    position: relative;
+    /* Essential for 3D depth */
+    perspective: 800px;
+}
+
+.dial-ring {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 4px solid #333;
+    position: absolute;
+    /* CRITICAL: Ensures children (the dot) rotate in 3D with the parent */
+    transform-style: preserve-3d;
+    transition: transform 0.15s ease-out;
+}
+
+.control-dot {
+    width: 24px;
+    height: 24px;
+    background: var(--accent-red);
+    border: 3px solid white;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    pointer-events: auto;
+    z-index: 10;
+    /* Optional: prevents the dot itself from flattening if you want it to look like a sphere */
+    /* transform-style: preserve-3d; */
+}
+
+/* Dial Decorations */
+.crosshair-v {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: #ddd;
+}
+
+.crosshair-h {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #ddd;
+}
+
+.notch {
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    width: 12px;
+    height: 12px;
+    background: #333;
+    transform: translateX(-50%);
+    border-radius: 2px;
+}
+
+/* Readout */
+.readout {
+    background: #f4f6f9;
+    padding: 15px;
+    border-radius: 12px;
+    width: 100%;
+    font-family: monospace;
+    font-size: 14px;
+    color: var(--text-muted);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 15px;
+}
+
+.readout b {
+    color: var(--accent-blue);
+}
+
+@media (max-width: 900px) {
+    body {
+        height: auto;
+        overflow-y: auto;
+    }
+}
+
+/* --- Image Overlay Actions --- */
+.remove-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    z-index: 10;
+}
+
+.remove-btn:hover {
+    background: var(--accent-red);
+}
+
+.result-actions {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 15px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 10px 20px;
+    border-radius: 50px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+}
+
+.action-btn {
+    background: white;
+    border: 1px solid var(--border);
+    color: var(--text-main);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: all 0.2s;
+}
+
+.action-btn:hover {
+    background: var(--accent-blue);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
