@@ -199,6 +199,7 @@ header {
 
 input.v-slider {
     -webkit-appearance: none;
+    appearance: none;
     background: #eee;
     height: 8px;
     width: 240px;
@@ -218,6 +219,7 @@ input.v-slider {
 
 input.h-slider {
     -webkit-appearance: none;
+    appearance: none;
     background: #eee;
     height: 8px;
     width: 90%;
@@ -396,4 +398,258 @@ input[type=range]::-webkit-slider-thumb {
     color: white;
     transform: translateY(-2px);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* --- SUBSCRIBE BUTTON --- */
+.subscribe-btn {
+    background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
+    border: none;
+    border-radius: 20px;
+    padding: 8px 16px;
+    color: white;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
+    font-family: var(--font-family);
+}
+
+.subscribe-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(168, 85, 247, 0.6);
+}
+
+
+
+/* Plan Icons */
+.plan-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    flex-shrink: 0;
+}
+
+.icon-blue {
+    background: #3b82f6;
+}
+
+.icon-yellow {
+    background: #eab308;
+}
+
+.icon-red {
+    background: #ef4444;
+}
+
+/* Pricing Grid */
+.pricing-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 25px;
+    padding: 20px 0;
+}
+
+.pricing-card {
+    background: var(--bg-color);
+    border: 2px solid var(--border);
+    /* Default */
+    border-radius: 20px;
+    padding: 35px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    transition: transform 0.2s, box-shadow 0.2s;
+    flex: 1 1 300px;
+    /* Reduced to fit 3-up more easily */
+    min-width: 280px;
+    /* Ensure they don't get too small */
+    max-width: 400px;
+}
+
+.pricing-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Card Accents - Full Border */
+.card-blue {
+    border-color: #3b82f6;
+}
+
+.card-yellow {
+    border-color: #eab308;
+}
+
+.card-red {
+    border-color: #ef4444;
+}
+
+/* Popular Tag */
+.popular-tag {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #eab308;
+    color: black;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 4px 12px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Card Content */
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.emoji-icon {
+    font-size: 24px;
+}
+
+.card-header h3 {
+    margin: 0;
+    font-size: 22px;
+    /* Slightly larger */
+    color: var(--text-main);
+    font-weight: 600;
+}
+
+.price {
+    font-size: 42px;
+    /* Bigger */
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 5px;
+    letter-spacing: -1px;
+}
+
+.price span {
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--text-muted);
+    letter-spacing: normal;
+}
+
+.limit {
+    font-size: 15px;
+    font-weight: 700;
+    color: #3b82f6;
+    /* Distinct blue like screenshot */
+    margin-bottom: 5px;
+}
+
+.math-note {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-style: italic;
+    margin: 5px 0 20px 0;
+}
+
+.features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px 0;
+    flex-grow: 1;
+}
+
+.features li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    font-size: 15px;
+    color: #555;
+    /* Slightly darker */
+}
+
+.features li i {
+    color: #3b82f6;
+    /* Checkmarks are blue */
+    font-size: 12px;
+}
+
+.positioning {
+    font-style: italic;
+    text-align: center;
+    margin-bottom: 25px;
+    color: var(--text-main);
+    font-weight: 600;
+    font-size: 16px;
+}
+
+/* Plan Buttons */
+.plan-btn {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: var(--font-family);
+    transition: all 0.2s;
+    border: none;
+}
+
+.plan-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Outline Button Revert */
+.btn-blue-outline {
+    background: transparent;
+    border: 2px solid #3b82f6;
+    color: #3b82f6;
+}
+
+.btn-blue-outline:hover {
+    background: #eff6ff;
+    color: #3b82f6;
+}
+
+.btn-yellow {
+    background: #eab308;
+    color: black;
+}
+
+.btn-yellow:hover {
+    background: #ca8a04;
+}
+
+.btn-red {
+    background: #ef4444;
+    color: white;
+}
+
+.btn-red:hover {
+    background: #dc2626;
+    color: white;
+}
+
+/* Dark Mode Adjustments */
+[data-theme="dark"] .pricing-card {
+    background: var(--bg-color);
+    /* Slightly lighter than panel base in dark mode if needed, or same */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .btn-blue-outline {
+    border-color: #60a5fa;
+    color: #60a5fa;
+}
+
+[data-theme="dark"] .btn-blue-outline:hover {
+    background: #60a5fa;
+    color: #0f172a;
 }

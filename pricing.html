@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="fav.ico">
+    <title>Plans | Shift. Studio</title>
+    <link rel="stylesheet" href="global.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            display: block !important;
+            /* Ensure standard flow */
+            overflow-y: auto !important;
+            height: auto !important;
+        }
+
+        .pricing-page-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            /* Restore top margin to give space from header */
+            padding: 0 25px;
+        }
+
+        .page-title {
+            text-align: center;
+            font-size: 42px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .page-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 50px;
+            font-size: 18px;
+        }
+
+        /* Logo Override for this page to match design */
+        .logo {
+            font-family: var(--font-family) !important;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <a href="home.html" class="logo">Shift.</a>
+
+        <div class="header-right">
+            <a href="home.html" style="color: var(--text-main); font-size: 24px; text-decoration: none;">
+                <i class="fas fa-home"></i>
+            </a>
+        </div>
+    </header>
+
+    <main class="pricing-page-container">
+        <h1 class="page-title">Choose Your Plan</h1>
+        <p class="page-subtitle">Unlock the full potential of Shift. cancel anytime.</p>
+
+        <div class="pricing-grid">
+            <!-- Free Plan -->
+            <div class="pricing-card card-blue">
+                <div class="card-header">
+                    <div class="plan-icon icon-blue"></div>
+                    <h3>Free — 2D</h3>
+                </div>
+                <div class="price">₹0 <span class="period">/ month</span></div>
+                <div class="limit">Limit: 5 images / month</div>
+                <ul class="features">
+                    <li><i class="fas fa-check"></i> Basic 2D angle change</li>
+                    <li><i class="fas fa-check"></i> Limited X / Y movement</li>
+                    <li><i class="fas fa-check"></i> Standard quality output</li>
+                    <li><i class="fas fa-info-circle"></i> Watermark included</li>
+                </ul>
+                <div class="positioning">
+                    "Try it. Feel the magic."
+                </div>
+                <button class="plan-btn btn-blue-outline">Current Plan</button>
+            </div>
+
+            <!-- Basic Plan -->
+            <div class="pricing-card card-yellow popular">
+                <div class="popular-tag">MOST POPULAR</div>
+                <div class="card-header">
+                    <div class="plan-icon icon-yellow"></div>
+                    <h3>Basic — 2.5D</h3>
+                </div>
+                <div class="price">₹199 <span class="period">/ month</span></div>
+                <div class="limit">Limit: 50 images / month</div>
+                <div class="math-note">That’s ~₹4 per image, totally reasonable.</div>
+                <ul class="features">
+                    <li><i class="fas fa-check"></i> Perspective tilt (X, Y, light Z)</li>
+                    <li><i class="fas fa-check"></i> Roll / Pitch / Yaw controls</li>
+                    <li><i class="fas fa-check"></i> Medium-quality render</li>
+                    <li><i class="fas fa-check"></i> No watermark</li>
+                    <li><i class="fas fa-bolt"></i> Faster processing</li>
+                </ul>
+                <div class="positioning">
+                    "More depth. More control."
+                </div>
+                <button class="plan-btn btn-yellow">Upgrade</button>
+            </div>
+
+            <!-- Pro Plan -->
+            <div class="pricing-card card-red">
+                <div class="card-header">
+                    <div class="plan-icon icon-red"></div>
+                    <h3>Pro — 3D</h3>
+                </div>
+                <div class="price">₹499 <span class="period">/ month</span></div>
+                <div class="limit">Limit: 200 images / month</div>
+                <div class="math-note">That’s ~₹2.5 per image. Feels like a steal.</div>
+                <ul class="features">
+                    <li><i class="fas fa-check"></i> Full 3D camera control</li>
+                    <li><i class="fas fa-check"></i> Orbit & depth simulation</li>
+                    <li><i class="fas fa-check"></i> High-quality output</li>
+                    <li><i class="fas fa-check"></i> Fastest processing</li>
+                    <li><i class="fas fa-star"></i> Early access to new features</li>
+                </ul>
+                <div class="positioning">
+                    "Total freedom. Real perspective."
+                </div>
+                <button class="plan-btn btn-red">Go Pro</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function toggleDropdown() {
+            document.getElementById('profileMenu').classList.toggle('active');
+        }
+        window.onclick = function (event) {
+            if (!event.target.closest('.profile-container')) {
+                document.getElementById('profileMenu').classList.remove('active');
+            }
+        }
+    </script>
+    <script src="theme.js"></script>
+</body>
+
+</html>
