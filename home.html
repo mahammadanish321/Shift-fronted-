@@ -109,12 +109,85 @@
                 display: flex;
                 flex-direction: column;
                 height: auto;
-                padding-bottom: 50px;
+                padding-bottom: 80px;
+                /* Space for fixed bottom controls if we added them, or just breathing room */
             }
 
             .img-frame {
                 height: 300px;
             }
+
+            /* Mobile Header Adjustments */
+            .header-right {
+                gap: 15px;
+            }
+
+            .subscribe-btn span {
+                display: none;
+                /* Hide text, keep icon if needed, or hide button entirely */
+            }
+
+            .subscribe-btn {
+                padding: 8px;
+                /* Circular-ish button */
+                border-radius: 50%;
+                width: 36px;
+                height: 36px;
+                justify-content: center;
+            }
+
+            .user-pill {
+                padding: 4px;
+                /* Collapse user pill to just avatar */
+                background: transparent;
+            }
+
+            .user-pill span,
+            .user-pill i {
+                display: none;
+            }
+
+            .avatar {
+                margin: 0;
+                width: 36px;
+                height: 36px;
+            }
+
+            /* Mobile Buttons Layout - Grid for better touch targets */
+            .bottom-bar {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+
+            #applyBtn {
+                grid-column: 1 / -1;
+                /* Full width */
+                order: -1;
+                /* First */
+                padding: 1rem;
+                font-size: 1.1rem;
+            }
+
+            .btn {
+                padding: 1rem;
+                /* Larger touch area */
+            }
+
+            /* Controller Adjustments */
+            .controller-col {
+                padding: 15px;
+            }
+
+            .control-grid {
+                /* Make it more compact or standard vertical flow */
+                display: flex;
+                flex-direction: column;
+                padding: 10px 0;
+            }
+
+            /* Hide the V-slider on very small screens or make it horizontal? 
+               For now, keeping it but ensuring container is touch-friendly. */
         }
     </style>
 </head>
