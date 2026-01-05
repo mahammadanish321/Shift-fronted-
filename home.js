@@ -292,3 +292,31 @@ if (editAgainBtn) editAgainBtn.addEventListener('click', () => {
         resetControls();
     }
 });
+
+// Check for image from History page
+const editImage = localStorage.getItem('shift_edit_image');
+if (editImage) {
+    // Create a temporary image to ensure it loads before setting
+    const tempImg = new Image();
+    tempImg.onload = () => {
+        if (sourceImg) {
+            sourceImg.src = editImage;
+            sourceImg.style.display = 'block';
+        }
+        if (sourcePlace) sourcePlace.style.display = 'none';
+        if (removeBtn) removeBtn.style.display = 'flex';
+
+        // Clear result area as if new file loaded
+        if (resultImg) {
+            resultImg.style.display = 'none';
+            resultImg.src = '';
+        }
+        if (resPlace) resPlace.style.display = 'block';
+        if (resultActions) resultActions.style.display = 'none';
+
+        resetControls();
+        // Clear storage
+        localStorage.removeItem('shift_edit_image');
+    }
+    tempImg.src = editImage;
+}

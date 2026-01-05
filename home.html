@@ -104,92 +104,217 @@
         }
 
         /* Responsive Fixes */
+        .fab-edit,
+        .controller-overlay {
+            display: none;
+        }
+
+        /* Hide on Desktop */
+        /* Responsive Fixes & Mobile Layout Re-arrangement */
         @media (max-width: 900px) {
             main {
                 display: flex;
                 flex-direction: column;
                 height: auto;
-                padding-bottom: 80px;
-                /* Space for fixed bottom controls if we added them, or just breathing room */
+                /* Add padding to bottom to prevent content being hidden behind fixed footer */
+                padding-bottom: 100px;
+                overflow-x: hidden;
+            }
+
+            /* 
+               CRITICAL: Use display: contents to "unwrap" the workflow-col 
+               so we can reorder its children (.image-stack, .bottom-bar) 
+               alongside .controller-col using CSS Order.
+            */
+            .workflow-col {
+                display: contents;
+            }
+
+            /* 1. IMAGE ON TOP */
+            .image-stack {
+                order: 1;
+                margin-bottom: 20px;
+                /* Ensure it doesn't take unnecessary height */
+                min-height: 300px;
             }
 
             .img-frame {
-                height: 300px;
+                min-height: 250px;
+                max-height: 400px;
+                /* Don't let it be too tall on huge phones */
             }
 
-            /* Mobile Header Adjustments */
-            .header-right {
-                gap: 15px;
+            /* 2. CONTROLS POPUP (Hidden by default) */
+            .controller-col {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%) scale(0.9);
+                width: 85%;
+                /* Slightly narrower */
+                max-width: 320px;
+                background: var(--panel-bg);
+                border: 1px solid var(--border);
+                box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+                z-index: 2000;
+                padding: 15px;
+                /* Reduced padding */
+                border-radius: 20px;
+
+                /* Hidden State */
+                opacity: 0;
+                pointer-events: none;
+                transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             }
 
-            .subscribe-btn span {
-                display: none;
-                /* Hide text, keep icon if needed, or hide button entirely */
+            /* Compact header inside popup */
+            .controller-col h3 {
+                margin: 0 0 5px 0 !important;
+                font-size: 1rem !important;
             }
 
-            .subscribe-btn {
-                padding: 8px;
-                /* Circular-ish button */
+            .controller-col.active {
+                opacity: 1;
+                pointer-events: auto;
+                transform: translate(-50%, -50%) scale(1);
+            }
+
+            /* Backdrop for popup */
+            .controller-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                backdrop-filter: blur(5px);
+                z-index: 1500;
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.3s;
+            }
+
+            .controller-overlay.active {
+                opacity: 1;
+                pointer-events: auto;
+            }
+
+            /* Floating Edit Button */
+            .fab-edit {
+                position: fixed;
+                bottom: 100px;
+                /* Above bottom bar */
+                right: 25px;
+                width: 60px;
+                height: 60px;
+                background: var(--accent-blue);
+                color: white;
                 border-radius: 50%;
-                width: 36px;
-                height: 36px;
+                border: none;
+                box-shadow: 0 5px 15px rgba(45, 108, 223, 0.4);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 24px;
+                z-index: 950;
+                /* Above bottom bar */
+                cursor: pointer;
+                transition: transform 0.2s;
+            }
+
+            .fab-edit:active {
+                transform: scale(0.95);
+            }
+
+            /* RESTORE CONTROL GRID LAYOUT (Slider Left, Dial Right) */
+            .control-grid {
+                display: grid;
+                grid-template-columns: 40px 1fr;
+                /* Slider width | Dial space */
+                grid-template-rows: 1fr 40px;
+                /* Dial height | Bottom slider height */
+                gap: 5px;
+                /* Tighter gap */
+                width: 100%;
+                max-width: 350px;
+                /* Constraint width */
+                margin: 0 auto;
+                /* Center the whole rig */
+                padding: 0;
+            }
+
+            /* Vertical Slider on Left */
+            .slider-v-wrap {
+                order: unset;
+                grid-row: 1;
+                grid-column: 1;
+                height: 100%;
+                width: 100%;
+                display: flex;
+                align-items: center;
                 justify-content: center;
             }
 
-            .user-pill {
-                padding: 4px;
-                /* Collapse user pill to just avatar */
-                background: transparent;
+            /* Keep it vertical! */
+            input.v-slider {
+                transform: rotate(-90deg);
+                width: 140px;
+                /* Reduced length (was 160px) */
+                height: 8px;
+                /* Match thickness of horizontal slider */
+                border-radius: 5px;
             }
 
-            .user-pill span,
-            .user-pill i {
-                display: none;
+            .dial-area {
+                order: unset;
+                grid-row: 1;
+                grid-column: 2;
+                display: flex;
+                /* Ensure centering */
+                align-items: center;
+                justify-content: center;
             }
 
-            .avatar {
-                margin: 0;
-                width: 36px;
-                height: 36px;
+            .slider-h-wrap {
+                order: unset;
+                grid-row: 2;
+                grid-column: 2;
             }
 
-            /* Mobile Buttons Layout - Grid for better touch targets */
+            .dial-wrapper {
+                width: 140px;
+                /* Reduced size (was 160px) */
+                height: 140px;
+            }
+
+            /* 3. ACTIONS FIXED AT BOTTOM */
             .bottom-bar {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 12px;
-            }
+                order: 3;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                background: var(--panel-bg);
+                /* Match theme */
+                padding: 15px 25px;
+                box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.1);
+                z-index: 900;
+                border-top: 1px solid var(--border);
 
-            #applyBtn {
-                grid-column: 1 / -1;
-                /* Full width */
-                order: -1;
-                /* First */
-                padding: 1rem;
-                font-size: 1.1rem;
+                /* Grid layout for buttons */
+                display: grid;
+                grid-template-columns: 1fr 2fr 1fr;
+                gap: 10px;
+                margin-top: 0;
             }
 
             .btn {
-                padding: 1rem;
-                /* Larger touch area */
+                height: 50px;
+                /* Fat finger friendly */
+                font-size: 1rem;
             }
-
-            /* Controller Adjustments */
-            .controller-col {
-                padding: 15px;
-            }
-
-            .control-grid {
-                /* Make it more compact or standard vertical flow */
-                display: flex;
-                flex-direction: column;
-                padding: 10px 0;
-            }
-
-            /* Hide the V-slider on very small screens or make it horizontal? 
-               For now, keeping it but ensuring container is touch-friendly. */
-        }
     </style>
+
 </head>
 
 <body>
@@ -198,22 +323,32 @@
         <a href="home.html" class="logo">Shift.</a>
 
         <div class="header-right">
+            <!-- Token Display -->
+            <div class="token-pill">
+                <i class="fas fa-bolt token-icon"></i>
+                <span id="headerCredits">0 / 0</span>
+            </div>
+
             <a href="pricing.html" class="subscribe-btn" style="text-decoration: none;">
                 <i class="fas fa-crown"></i> Subscribe
             </a>
 
-            <a href="history.html" style="color: var(--accent-red); font-size: 20px;">
+            <!-- History Button (Circular) -->
+            <a href="history.html" class="nav-icon-btn" title="History">
                 <i class="fas fa-history"></i>
             </a>
 
             <div class="profile-container" onclick="toggleDropdown()">
                 <div class="user-pill">
-                    <div class="avatar"></div>
-                    <span>User name</span>
-                    <i class="fas fa-chevron-down" style="font-size: 10px; margin-left: 5px;"></i>
+                    <div class="avatar" id="navAvatar"></div>
+                    <div class="user-text">
+                        <span class="user-name" id="navUsername">Anish</span>
+                    </div>
+                    <i class="fas fa-chevron-down"
+                        style="font-size: 12px; margin-left: 5px; color: var(--text-muted);"></i>
                 </div>
                 <div class="dropdown-menu" id="profileMenu">
-                    <a href="#" class="dropdown-item"><i class="fas fa-user"></i> Profile</a>
+                    <a href="profile.html" class="dropdown-item"><i class="fas fa-user"></i> Profile</a>
                     <a href="#" class="dropdown-item"><i class="fas fa-cog"></i> Settings</a>
                     <a href="#" class="dropdown-item" id="themeBtn">
                         <i class="fas fa-moon" id="themeIcon"></i> <span id="themeText"> Dark Mode</span>
@@ -289,6 +424,11 @@
         </div>
     </main>
 
+
+
+    <div id="controllerOverlay" class="controller-overlay"></div>
+    <button id="fabEdit" class="fab-edit"><i class="fas fa-sliders-h"></i></button>
+
     <div id="dragOverlay"
         style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(45, 108, 223, 0.9); z-index: 9999; display: none; justify-content: center; align-items: center; flex-direction: column; color: white;">
         <i class="fas fa-cloud-download-alt" style="font-size: 80px; margin-bottom: 20px;"></i>
@@ -298,6 +438,8 @@
 
 
     <script>
+
+
         function toggleDropdown() {
             document.getElementById('profileMenu').classList.toggle('active');
         }
@@ -305,6 +447,31 @@
             if (!event.target.closest('.profile-container')) {
                 document.getElementById('profileMenu').classList.remove('active');
             }
+        }
+
+        // Mobile Controller Toggle
+        const fabEdit = document.getElementById('fabEdit');
+        const controllerCol = document.querySelector('.controller-col');
+        const controllerOverlay = document.getElementById('controllerOverlay');
+
+        function toggleController() {
+            controllerCol.classList.toggle('active');
+            controllerOverlay.classList.toggle('active');
+
+            // Toggle icon
+            const icon = fabEdit.querySelector('i');
+            if (controllerCol.classList.contains('active')) {
+                icon.classList.remove('fa-sliders-h');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-sliders-h');
+            }
+        }
+
+        if (fabEdit) {
+            fabEdit.addEventListener('click', toggleController);
+            controllerOverlay.addEventListener('click', toggleController);
         }
     </script>
     <script src="theme.js"></script>

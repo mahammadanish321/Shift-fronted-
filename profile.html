@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="fav.ico">
+    <title>Shift. | Profile</title>
+    <link rel="stylesheet" href="global.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <header>
+        <a href="home.html" class="logo">Shift.</a>
+
+        <div class="header-right">
+            <!-- Token Display -->
+            <div class="token-pill">
+                <i class="fas fa-bolt token-icon"></i>
+                <span id="headerCredits">0 / 0</span>
+            </div>
+
+            <a href="pricing.html" class="subscribe-btn" style="text-decoration: none;">
+                <i class="fas fa-crown"></i> Subscribe
+            </a>
+
+            <!-- History Button (Circular) -->
+            <a href="history.html" class="nav-icon-btn" title="History">
+                <i class="fas fa-history"></i>
+            </a>
+
+            <!-- Home Button (Circular) -->
+            <a href="home.html" class="nav-icon-btn" title="Home">
+                <i class="fas fa-home"></i>
+            </a>
+
+            <div class="profile-container" onclick="toggleDropdown()">
+                <div class="user-pill">
+                    <div class="avatar" id="navAvatar"></div>
+                    <div class="user-text">
+                        <span class="user-name" id="navUsername">Anish</span>
+                    </div>
+                    <i class="fas fa-chevron-down"
+                        style="font-size: 12px; margin-left: 5px; color: var(--text-muted);"></i>
+                </div>
+                <div class="dropdown-menu" id="profileMenu">
+                    <a href="profile.html" class="dropdown-item"><i class="fas fa-user"></i> Profile</a>
+                    <a href="#" class="dropdown-item"><i class="fas fa-cog"></i> Settings</a>
+                    <a href="#" class="dropdown-item" id="themeBtn">
+                        <i class="fas fa-moon" id="themeIcon"></i> <span id="themeText"> Dark Mode</span>
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item text-red"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="profile-main-container">
+
+        <!-- Profile Card -->
+        <div class="profile-card">
+            <div class="cover-wrapper">
+                <img src="" alt="Cover Image" class="cover-image" id="profileCover"
+                    onerror="this.src='https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=2070&auto=format&fit=crop'">
+            </div>
+
+            <div class="profile-info-bar">
+                <div class="profile-identity">
+                    <img src="" alt="Profile" class="avatar-large" id="profileAvatar"
+                        onerror="this.src='https://i.pravatar.cc/150?img=11'">
+                    <div class="user-details">
+                        <h1 id="profileName">Loading...</h1>
+                        <p class="user-handle" id="profileHandle">@loading</p>
+                    </div>
+                </div>
+
+                <div class="profile-actions">
+                    <button class="btn btn-blue-outline"
+                        style="padding: 8px 20px; font-weight: 600; border-radius: 8px; cursor: pointer;">
+                        Edit Profile
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon bg-purple">
+                    <i class="fas fa-coins"></i>
+                </div>
+                <div class="stat-info">
+                    <h4>Available Credits</h4>
+                    <p id="profileCredits">-</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon bg-blue">
+                    <i class="fas fa-star"></i>
+                </div>
+                <div class="stat-info">
+                    <h4>Plan</h4>
+                    <p id="profilePlan">-</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon bg-green">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <div class="stat-info">
+                    <h4>Email</h4>
+                    <p id="profileEmail" style="font-size: 16px; overflow: hidden; text-overflow: ellipsis;">-</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- History / Details -->
+        <div class="profile-card" style="padding: 25px;">
+            <div class="history-section">
+                <h2>Watch History</h2>
+                <div id="watchHistoryList">
+                    <p style="color: var(--text-muted);">No history available.</p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        function toggleDropdown() {
+            document.getElementById('profileMenu').classList.toggle('active');
+        }
+        window.onclick = function (event) {
+            if (!event.target.closest('.profile-container')) {
+                document.getElementById('profileMenu').classList.remove('active');
+            }
+        }
+    </script>
+    <script src="theme.js"></script>
+    <script src="profile.js"></script>
+</body>
+
+</html>

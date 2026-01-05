@@ -50,17 +50,20 @@ header {
     justify-content: space-between;
     align-items: center;
     padding: 0 25px;
-    background-color: var(--bg-color);
+    background-color: var(--panel-bg);
+    border-bottom: 1px solid var(--border);
     flex-shrink: 0;
     z-index: 100;
 }
 
 .logo {
-    font-family: 'Brush Script MT', cursive;
-    font-size: 32px;
-    font-weight: bold;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 26px;
+    font-weight: 800;
     text-decoration: none;
-    color: #000;
+    color: var(--text-main);
+    letter-spacing: -1.5px;
+    text-transform: uppercase;
 }
 
 .header-right {
@@ -94,20 +97,66 @@ header {
     cursor: pointer;
 }
 
+/* Nav Icon Buttons (History, Home, Notifications) */
+.nav-icon-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--panel-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-main);
+    font-size: 18px;
+    transition: all 0.2s;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.nav-icon-btn:hover {
+    background: var(--dropdown-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    color: var(--accent-blue);
+}
+
+/* Updated Profile Pill */
 .user-pill {
     display: flex;
     align-items: center;
-    background: #8ba6d6;
-    padding: 4px 12px 4px 4px;
-    border-radius: 20px;
-    color: white;
-    font-weight: 600;
-    font-size: 14px;
-    transition: background 0.2s;
+    gap: 10px;
+    background: var(--panel-bg);
+    /* Clean background */
+    padding: 6px 12px 6px 6px;
+    /* Optimized padding */
+    border-radius: 40px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s;
 }
 
 .user-pill:hover {
-    background: #7a95c5;
+    background: var(--dropdown-hover);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.user-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    line-height: 1.2;
+}
+
+.user-name {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--text-main);
+}
+
+.user-email {
+    font-size: 11px;
+    color: var(--text-muted);
 }
 
 .avatar {
@@ -652,4 +701,224 @@ input[type=range]::-webkit-slider-thumb {
 [data-theme="dark"] .btn-blue-outline:hover {
     background: #60a5fa;
     color: #0f172a;
+}
+
+/* --- PROFILE PAGE --- */
+.profile-main-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 20px;
+    overflow-y: auto;
+    height: calc(100vh - 60px);
+}
+
+.profile-card {
+    background: var(--panel-bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 25px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.cover-wrapper {
+    height: 200px;
+    width: 100%;
+    background-color: #ddd;
+    position: relative;
+    overflow: hidden;
+}
+
+.cover-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-info-bar {
+    padding: 0 30px 25px 30px;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: -50px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.profile-identity {
+    display: flex;
+    align-items: flex-end;
+    gap: 20px;
+}
+
+.avatar-large {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 4px solid var(--panel-bg);
+    background: #ccc;
+    object-fit: cover;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.user-details {
+    padding-bottom: 5px;
+    margin-top: 60px;
+}
+
+.user-details h1 {
+    margin: 0;
+    font-size: 28px;
+    color: var(--text-main);
+    font-weight: 700;
+}
+
+.user-handle {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.profile-actions {
+    padding-bottom: 10px;
+    display: flex;
+    gap: 10px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.stat-card {
+    background: var(--panel-bg);
+    border: 1px solid var(--border);
+    padding: 20px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: transform 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+}
+
+.stat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: white;
+    flex-shrink: 0;
+}
+
+.stat-info h4 {
+    margin: 0 0 5px 0;
+    font-size: 14px;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.stat-info p {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.bg-purple {
+    background: linear-gradient(135deg, #a855f7, #9333ea);
+}
+
+.bg-blue {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+
+.bg-green {
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+}
+
+/* History Section */
+.history-section h2 {
+    color: var(--text-main);
+    margin: 0 0 20px 0;
+    font-size: 20px;
+}
+
+@media (max-width: 600px) {
+    .profile-info-bar {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        margin-top: -60px;
+    }
+
+    .profile-identity {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .user-details {
+        margin-top: 10px;
+        padding-bottom: 0;
+    }
+
+}
+
+/* History Card specific actions (Global) */
+.history-card .card-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.history-btn {
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 14px;
+    font-family: var(--font-family);
+    border: 1px solid transparent;
+}
+
+.history-btn.btn-download {
+    width: 40px;
+    background: var(--panel-bg);
+    border-color: var(--border);
+    color: var(--text-main);
+    flex-shrink: 0;
+}
+
+.history-btn.btn-download:hover {
+    background: var(--dropdown-hover);
+    color: var(--accent-blue);
+    border-color: var(--accent-blue);
+}
+
+.history-btn.btn-edit {
+    flex-grow: 1;
+    background: var(--accent-blue);
+    color: white;
+    font-weight: 600;
+}
+
+.history-btn.btn-edit:hover {
+    background: #4a8df8;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(45, 108, 223, 0.2);
 }
