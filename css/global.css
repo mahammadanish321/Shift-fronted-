@@ -15,16 +15,26 @@
 }
 
 [data-theme="dark"] {
-    /* Dark Theme (Professional Slate) */
-    --bg-color: #0f172a;
-    --panel-bg: #1e293b;
-    --text-main: #f8fafc;
-    --text-muted: #94a3b8;
-    --border: #334155;
-    --accent-blue: #60a5fa;
-    --accent-red: #f87171;
-    --dropdown-bg: #1e293b;
-    --dropdown-hover: #334155;
+    /* "Olivia" Dribbble Inspired Theme */
+    --bg-color: #0e1225;
+    /* Deepest Navy */
+    --panel-bg: #1e2440;
+    /* Card Navy */
+    --text-main: #ffffff;
+    /* Pure White */
+    --text-muted: #8b96b5;
+    /* Blue-Grey */
+    --border: #2e365c;
+    /* Muted Blue Border */
+
+    /* Vibrant Accents */
+    --accent-blue: #5b6bf9;
+    /* Vibrant Royal Blue */
+    --accent-red: #f43f5e;
+    /* Hot Pink (matching the FAB vibe) */
+
+    --dropdown-bg: #1e2440;
+    --dropdown-hover: #2b335a;
 }
 
 * {
@@ -384,7 +394,7 @@ input[type=range]::-webkit-slider-thumb {
 
 /* Readout */
 .readout {
-    background: #f4f6f9;
+    background: var(--bg-color);
     padding: 15px;
     border-radius: 12px;
     width: 100%;
@@ -446,7 +456,7 @@ input[type=range]::-webkit-slider-thumb {
 }
 
 .action-btn {
-    background: white;
+    background: var(--panel-bg);
     border: 1px solid var(--border);
     color: var(--text-main);
     width: 40px;
@@ -706,19 +716,19 @@ input[type=range]::-webkit-slider-thumb {
 
 /* Dark Mode Adjustments */
 [data-theme="dark"] .pricing-card {
-    background: var(--bg-color);
-    /* Slightly lighter than panel base in dark mode if needed, or same */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    background: var(--panel-bg);
+    border-color: var(--border);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 }
 
 [data-theme="dark"] .btn-blue-outline {
-    border-color: #60a5fa;
-    color: #60a5fa;
+    border-color: var(--accent-blue);
+    color: var(--accent-blue);
 }
 
 [data-theme="dark"] .btn-blue-outline:hover {
-    background: #60a5fa;
-    color: #0f172a;
+    background: var(--accent-blue);
+    color: white;
 }
 
 /* --- PROFILE PAGE --- */
