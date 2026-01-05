@@ -310,11 +310,29 @@ input[type=range]::-webkit-slider-thumb {
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    border: 4px solid #333;
+    border: 6px solid var(--accent-blue);
+    /* Main color */
     position: absolute;
     /* CRITICAL: Ensures children (the dot) rotate in 3D with the parent */
     transform-style: preserve-3d;
     transition: transform 0.15s ease-out;
+    box-shadow: 0 0 20px rgba(45, 108, 223, 0.3);
+    /* Glow */
+}
+
+/* Fakes 3D thickness */
+.dial-ring::after {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: -6px;
+    right: -6px;
+    bottom: -6px;
+    border: 6px solid #1e3a8a;
+    /* Darker blue for depth */
+    border-radius: 50%;
+    transform: translateZ(-8px);
+    pointer-events: none;
 }
 
 .control-dot {
@@ -855,12 +873,96 @@ input[type=range]::-webkit-slider-thumb {
     font-size: 20px;
 }
 
+/* --- MOBILE RESPONSIVENESS --- */
 @media (max-width: 600px) {
+
+    /* Header Adjustments */
+    header {
+        padding: 0 15px;
+        height: 55px;
+    }
+
+    .logo {
+        font-size: 20px;
+    }
+
+    .header-right {
+        gap: 8px;
+    }
+
+    /* Compact Subscribe Button */
+    .subscribe-btn {
+        padding: 8px;
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        justify-content: center;
+    }
+
+    .subscribe-btn span,
+    .subscribe-btn text {
+        display: none;
+        /* Attempt to hide text nodes if wrapped, otherwise font-size fix */
+    }
+
+    .subscribe-btn {
+        font-size: 0;
+        /* Hides text */
+    }
+
+    .subscribe-btn i {
+        font-size: 14px;
+        /* Show icon */
+        margin: 0;
+    }
+
+    /* Compact Token Pill */
+    .token-pill {
+        padding: 4px 10px;
+        font-size: 12px;
+    }
+
+    /* Compact User Profile */
+    .user-pill {
+        padding: 4px;
+        /* Just around avatar */
+        border: none;
+        /* Cleaner look on mobile */
+        background: transparent;
+    }
+
+    .user-pill:hover {
+        background: transparent;
+    }
+
+    .user-text {
+        display: none;
+    }
+
+    .avatar {
+        margin: 0;
+        width: 36px;
+        height: 36px;
+    }
+
+    .chevron-icon {
+        display: none;
+    }
+
+    /* Hide History/Home text labels if any existed, ensure buttons are sized right */
+    .nav-icon-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+    }
+
+    /* Profile Page Mobile adjustments */
     .profile-info-bar {
         flex-direction: column;
         align-items: center;
         text-align: center;
         margin-top: -60px;
+        padding-bottom: 20px;
     }
 
     .profile-identity {
@@ -874,7 +976,12 @@ input[type=range]::-webkit-slider-thumb {
         padding-bottom: 0;
     }
 
+    .profile-actions {
+        width: 100%;
+        justify-content: center;
+    }
 }
+
 
 /* History Card specific actions (Global) */
 .history-card .card-actions {
