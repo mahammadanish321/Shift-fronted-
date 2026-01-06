@@ -26,14 +26,19 @@
     <div class="login-container">
         <div class="login-card">
             <h2>Welcome Back</h2>
-            <form action="home.html">
+            <!-- Error Message Container (Hidden by default) -->
+            <div id="error-message"
+                style="display: none; color: #ffeb3b; background: rgba(255, 0, 0, 0.1); padding: 10px; border-radius: 8px; margin-bottom: 20px; font-size: 0.9rem; border: 1px solid rgba(255, 0, 0, 0.3);">
+            </div>
+
+            <form id="login-form">
                 <div class="input-group">
-                    <label>Email</label>
-                    <input type="email" required placeholder="name@example.com">
+                    <label>Username or Email</label>
+                    <input type="text" id="username" required placeholder="name@example.com">
                 </div>
                 <div class="input-group">
                     <label>Password</label>
-                    <input type="password" required placeholder="••••••••">
+                    <input type="password" id="password" required placeholder="••••••••">
                 </div>
                 <button type="submit" class="btn-submit">Login</button>
             </form>
@@ -49,6 +54,13 @@
             </div>
         </div>
     </div>
+
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="routes/api.js"></script>
+    <script src="routes/auth.js"></script>
+    <script src="js/login.js"></script>
 
 </body>
 

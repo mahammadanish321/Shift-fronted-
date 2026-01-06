@@ -126,3 +126,78 @@
     opacity: 0.9;
     transform: translateY(-1px);
 }
+
+/* Upload Styles */
+.avatar-upload-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.avatar-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.avatar-preview {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+}
+
+.camera-btn {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: var(--accent-blue);
+    border: none;
+    color: white;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    transition: transform 0.2s;
+}
+
+.camera-btn:hover {
+    transform: scale(1.1);
+    background: var(--accent-blue);
+    filter: brightness(1.1);
+}
+
+.cover-upload-preview {
+    width: 100%;
+    height: 100px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    cursor: pointer;
+    border: 1px dashed var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    overflow: hidden;
+}
+
+.cover-upload-preview:hover {
+    border-color: var(--accent-blue);
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.cover-upload-text {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    pointer-events: none;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}

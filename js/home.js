@@ -40,7 +40,40 @@ document.body.appendChild(fileInput);
 
 
 // =========================================
-// 2. HELPER FUNCTIONS
+// 2. USER DATA & INITIALIZATION
+// =========================================
+async function initUser() {
+    try {
+        const userData = await AuthAPI.getCurrentUser();
+        // Assuming response structure: { data: { user: { fullName, username, credits, ... } } } 
+        // OR as per request simply "Fetching the profile details"
+        // Let's assume the response is the user object or contains it.
+        // We'll fallback to localStorage if needed or just use what api returns.
+
+        const user = userData.data.user || userData.data || userData;
+
+        // Update UI
+        const navUsername = document.getElementById('navUsername');
+        const headerCredits = document.getElementById('headerCredits');
+
+        if (navUsername) navUsername.textContent = user.username || user.fullName || 'User';
+        if (headerCredits) headerCredits.innerText = `${user.credits || 0} / ${user.subscription ? user.subscription.limit : 0}`; // Adjust based on actual response
+
+        // Optionally update avatar if exists
+        // const navAvatar = document.getElementById('navAvatar');
+        // if (user.avatarUrl) navAvatar.style.backgroundImage = `url(${user.avatarUrl})`;
+
+    } catch (error) {
+        console.error("Failed to fetch user:", error);
+        // Api interceptor will handle redirect if 401
+    }
+}
+
+// Call on load
+document.addEventListener('DOMContentLoaded', initUser);
+
+// =========================================
+// 3. HELPER FUNCTIONS
 // =========================================
 
 function updateReadout() {
@@ -72,6 +105,7 @@ function resetControls() {
 // 3. DRAG AND DROP LOGIC
 // =========================================
 let dragCounter = 0;
+let currentFile = null; // Store the currently loaded file
 
 ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
     document.body.addEventListener(eventName, (e) => {
@@ -184,6 +218,7 @@ const editAgainBtn = document.getElementById('editAgainBtn');
 
 function loadImage(file) {
     if (!file) return;
+    currentFile = file; // Store for API upload
     const url = URL.createObjectURL(file);
 
     if (sourceImg) {
@@ -211,6 +246,7 @@ fileInput.addEventListener('change', (e) => loadImage(e.target.files[0]));
 
 // Remove Image
 if (removeBtn) removeBtn.addEventListener('click', () => {
+    currentFile = null;
     if (sourceImg) {
         sourceImg.src = '';
         sourceImg.style.display = 'none';
@@ -229,8 +265,8 @@ if (removeBtn) removeBtn.addEventListener('click', () => {
 });
 
 // Apply
-if (applyBtn) applyBtn.addEventListener('click', () => {
-    if (!sourceImg || sourceImg.style.display === 'none') {
+if (applyBtn) applyBtn.addEventListener('click', async () => {
+    if (!currentFile) {
         alert("Please upload an image first.");
         return;
     }
@@ -240,20 +276,33 @@ if (applyBtn) applyBtn.addEventListener('click', () => {
     applyBtn.style.opacity = "0.7";
     applyBtn.disabled = true;
 
-    // Simulate API delay
-    setTimeout(() => {
-        applyBtn.innerText = originalText;
-        applyBtn.style.opacity = "1";
-        applyBtn.disabled = false;
+    try {
+        const formData = new FormData();
+        formData.append('image', currentFile);
+        formData.append('pitch', state.pitch);
+        formData.append('yaw', state.yaw);
+        formData.append('roll', state.rot);
+
+        const blob = await ImageAPI.transform(formData);
+
+        // Convert blob to URL for display
+        const resultUrl = URL.createObjectURL(blob);
 
         if (resultImg) {
-            resultImg.src = sourceImg.src;
+            resultImg.src = resultUrl;
             resultImg.style.display = 'block';
         }
         if (resPlace) resPlace.style.display = 'none';
         if (resultActions) resultActions.style.display = 'flex';
 
-    }, 1500);
+    } catch (error) {
+        console.error("Transformation failed:", error);
+        alert(getErrorMessage(error)); // Using utility from api.js
+    } finally {
+        applyBtn.innerText = originalText;
+        applyBtn.style.opacity = "1";
+        applyBtn.disabled = false;
+    }
 });
 
 // Reset
