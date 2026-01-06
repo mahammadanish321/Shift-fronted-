@@ -118,7 +118,12 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             google.accounts.id.renderButton(
                 btnContainer,
-                { theme: "outline", size: "large", width: btnContainer.offsetWidth } // approximate width
+                {
+                    theme: "outline",
+                    size: "large",
+                    shape: "pill",
+                    width: btnContainer.offsetWidth
+                }
             );
         } else {
             // Retry if script not loaded yet

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="fav.ico">
+    <title>Shift | Report Issue</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/auth.css">
+    <style>
+        /* Specific overrides for report page */
+        textarea {
+            width: 100%;
+            background: transparent;
+            border: 1px solid #333;
+            padding: 1rem;
+            color: white;
+            font-family: inherit;
+            font-size: 16px;
+            border-radius: 8px;
+            outline: none;
+            transition: 0.3s;
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        textarea:focus {
+            border-color: var(--accent);
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <a href="index.html" class="logo">Shift.</a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="login.html">Login</a>
+        </div>
+    </nav>
+
+    <div class="login-container">
+        <div class="login-card">
+            <h2>Report an Issue</h2>
+            <p style="margin-bottom: 2rem; color: #888; font-size: 0.9rem;">
+                Found a bug or have feedback? Let us know.
+            </p>
+
+            <form id="report-form">
+                <div class="input-group">
+                    <label>Your Name</label>
+                    <input type="text" id="name" name="name" required placeholder="John Doe">
+                </div>
+                <div class="input-group">
+                    <label>Your Email</label>
+                    <input type="email" id="email" name="email" required placeholder="name@example.com">
+                </div>
+                <div class="input-group">
+                    <label>Issue Description</label>
+                    <textarea id="issue" name="message" required
+                        placeholder="Describe the issue you encountered..."></textarea>
+                </div>
+                <button type="submit" class="btn-submit">Send Report</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function () {
+            emailjs.init("kLWJbqh653bYHrjBl");
+        })();
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="routes/api.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Auto-fill details if logged in
+            const userStr = localStorage.getItem('user');
+            if (userStr) {
+                try {
+                    const user = JSON.parse(userStr);
+                    if (user.email) document.getElementById('email').value = user.email;
+                    if (user.fullName || user.username) document.getElementById('name').value = user.fullName || user.username;
+                } catch (e) { }
+            }
+
+            document.getElementById('report-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const btn = e.target.querySelector('button');
+                const originalText = btn.textContent;
+
+                btn.textContent = 'Sending...';
+                btn.disabled = true;
+
+                // Prepare template params
+                const templateParams = {
+                    name: document.getElementById('name').value,
+                    email: document.getElementById('email').value,
+                    message: document.getElementById('issue').value,
+                    title: "Issue Report from Shift"
+                };
+
+                emailjs.send('service_ubwg5gm', 'template_cfddcfq', templateParams)
+                    .then(function () {
+                        showToast("Thank you! Your report has been submitted.", 'success');
+                        e.target.reset();
+                        btn.textContent = originalText;
+                        btn.disabled = false;
+                    }, function (error) {
+                        console.error('FAILED...', error);
+                        showToast("Failed to send report. Please try again.", 'error');
+                        btn.textContent = originalText;
+                        btn.disabled = false;
+                    });
+            });
+        });
+    </script>
+
+</body>
+
+</html>

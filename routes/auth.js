@@ -104,5 +104,48 @@ const AuthAPI = {
         } catch (error) {
             throw error;
         }
+    },
+
+    /**
+     * Logs out the user.
+     * @returns {Promise} Axios response data
+     */
+    logout: async () => {
+        try {
+            const response = await api.post('/users/logout');
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
     }
 };
+
+// Global Logout Handler
+document.addEventListener('DOMContentLoaded', () => {
+    const logoutBtn = document.querySelector('.dropdown-item.text-red');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+
+            try {
+                await AuthAPI.logout();
+            } catch (error) {
+                console.error("Logout API call failed:", error);
+            }
+
+            // Clear Client State
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('user');
+            localStorage.removeItem('shift_edit_image');
+
+            if (typeof showToast === 'function') {
+                showToast("Logged out successfully", 'success');
+            }
+
+            // Redirect
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 800);
+        });
+    }
+});
