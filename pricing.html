@@ -21,9 +21,34 @@
         <a href="home.html" class="logo">Shift.</a>
 
         <div class="header-right">
-            <a href="home.html" style="color: var(--text-main); font-size: 24px; text-decoration: none;">
+            <!-- Token Display -->
+            <div class="token-pill">
+                <i class="fas fa-bolt token-icon"></i>
+                <span id="headerCredits">0 / 0</span>
+            </div>
+
+            <a href="home.html" class="nav-icon-btn" title="Home">
                 <i class="fas fa-home"></i>
             </a>
+
+            <div class="profile-container" onclick="toggleDropdown()">
+                <div class="user-pill">
+                    <div class="avatar" id="navAvatar"></div>
+                    <div class="user-text">
+                        <span class="user-name" id="navUsername"></span>
+                    </div>
+                    <i class="fas fa-chevron-down"
+                        style="font-size: 12px; margin-left: 5px; color: var(--text-muted);"></i>
+                </div>
+                <div class="dropdown-menu" id="profileMenu">
+                    <a href="profile.html" class="dropdown-item"><i class="fas fa-user"></i> Profile</a>
+                    <a href="#" class="dropdown-item" id="themeBtn">
+                        <i class="fas fa-moon" id="themeIcon"></i> <span id="themeText"> Dark Mode</span>
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item text-red"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </div>
         </div>
     </header>
 
@@ -63,16 +88,11 @@
                 <div class="limit">Limit: 50 images / month</div>
                 <div class="math-note">That’s ~₹4 per image, totally reasonable.</div>
                 <ul class="features">
-                    <!-- <li><i class="fas fa-check"></i> Perspective tilt (X, Y, light Z)</li>
-                    <li><i class="fas fa-check"></i> Roll / Pitch / Yaw controls</li>
-                    <li><i class="fas fa-check"></i> Medium-quality render</li>
-                    <li><i class="fas fa-check"></i> No watermark</li>
-                    <li><i class="fas fa-bolt"></i> Faster processing</li> -->
                 </ul>
                 <div class="positioning">
                     "More depth. More control."
                 </div>
-                <button class="plan-btn btn-yellow">Upgrade</button>
+                <button class="plan-btn btn-yellow pricing-btn" data-plan="Basic" data-price="99">Upgrade</button>
             </div>
 
             <!-- Pro Plan -->
@@ -85,20 +105,16 @@
                 <div class="limit">Limit: 200 images / month</div>
                 <div class="math-note">That’s ~₹2.5 per image. Feels like a steal.</div>
                 <ul class="features">
-                    <!-- <li><i class="fas fa-check"></i> Full 3D camera control</li>
-                    <li><i class="fas fa-check"></i> Orbit & depth simulation</li>
-                    <li><i class="fas fa-check"></i> High-quality output</li>
-                    <li><i class="fas fa-check"></i> Fastest processing</li>
-                    <li><i class="fas fa-star"></i> Early access to new features</li> -->
                 </ul>
                 <div class="positioning">
                     "Total freedom. Real perspective."
                 </div>
-                <button class="plan-btn btn-red">Go Pro</button>
+                <button class="plan-btn btn-red pricing-btn" data-plan="Pro" data-price="199">Go Pro</button>
             </div>
         </div>
     </main>
 
+    <!-- Navigation Logic Script -->
     <script>
         function toggleDropdown() {
             document.getElementById('profileMenu').classList.toggle('active');
@@ -109,6 +125,18 @@
             }
         }
     </script>
+
+    <!-- Dependencies -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <!-- Routes -->
+    <script src="routes/api.js"></script>
+    <script src="routes/auth.js"></script>
+    <script src="routes/payments.js"></script>
+
+    <!-- Page Logic -->
+    <script src="js/pricing.js"></script>
     <script src="js/theme.js"></script>
 </body>
 

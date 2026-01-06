@@ -45,7 +45,7 @@
                 <div class="user-pill">
                     <div class="avatar" id="navAvatar"></div>
                     <div class="user-text">
-                        <span class="user-name" id="navUsername">Anish</span>
+                        <span class="user-name" id="navUsername"></span>
                     </div>
                     <i class="fas fa-chevron-down"
                         style="font-size: 12px; margin-left: 5px; color: var(--text-muted);"></i>
@@ -68,17 +68,15 @@
         <!-- Profile Card -->
         <div class="profile-card">
             <div class="cover-wrapper">
-                <img src="" alt="Cover Image" class="cover-image" id="profileCover"
-                    onerror="this.src='https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=2070&auto=format&fit=crop'">
+                <img src="" alt="Cover Image" class="cover-image" id="profileCover">
             </div>
 
             <div class="profile-info-bar">
                 <div class="profile-identity">
-                    <img src="" alt="Profile" class="avatar-large" id="profileAvatar"
-                        onerror="this.src='https://i.pravatar.cc/150?img=11'">
+                    <img src="" alt="Profile" class="avatar-large" id="profileAvatar">
                     <div class="user-details">
-                        <h1 id="profileName">Loading...</h1>
-                        <p class="user-handle" id="profileHandle">@loading</p>
+                        <h1 id="profileName"></h1>
+                        <p class="user-handle" id="profileHandle"></p>
                     </div>
                 </div>
 
@@ -190,6 +188,9 @@
             }
         }
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="routes/api.js"></script>
+    <script src="routes/auth.js"></script>
     <script src="js/theme.js"></script>
     <script src="js/profile.js"></script>
 </body>

@@ -39,7 +39,7 @@
                 <div class="user-pill">
                     <div class="avatar" id="navAvatar"></div>
                     <div class="user-text">
-                        <span class="user-name" id="navUsername">Anish</span>
+                        <span class="user-name" id="navUsername"></span>
                     </div>
                     <i class="fas fa-chevron-down"
                         style="font-size: 12px; margin-left: 5px; color: var(--text-muted);"></i>
@@ -60,70 +60,14 @@
         <h1>Generation History</h1>
 
         <div class="history-grid">
-
-            <div class="history-card">
-                <div class="card-img">
-                    <img src="https://picsum.photos/300/200?random=1" alt="Generated" class="history-image">
-                </div>
-                <div class="card-body">
-                    <div class="card-date">Dec 31, 2024 • 10:42 AM</div>
-                    <div class="card-title">Portrait Tilt Fix</div>
-                    <div class="card-actions">
-                        <button class="history-btn btn-download"
-                            onclick="downloadImage('https://picsum.photos/300/200?random=1')">
-                            <i class="fas fa-download"></i>
-                        </button>
-                        <button class="history-btn btn-edit"
-                            onclick="editAgain('https://picsum.photos/300/200?random=1')">
-                            Edit Again
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="history-card">
-                <div class="card-img">
-                    <img src="https://picsum.photos/300/200?random=2" alt="Generated" class="history-image">
-                </div>
-                <div class="card-body">
-                    <div class="card-date">Dec 30, 2024 • 2:15 PM</div>
-                    <div class="card-title">Landscape Rotate</div>
-                    <div class="card-actions">
-                        <button class="history-btn btn-download"
-                            onclick="downloadImage('https://picsum.photos/300/200?random=2')">
-                            <i class="fas fa-download"></i>
-                        </button>
-                        <button class="history-btn btn-edit"
-                            onclick="editAgain('https://picsum.photos/300/200?random=2')">
-                            Edit Again
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="history-card">
-                <div class="card-img">
-                    <img src="https://picsum.photos/300/200?random=3" alt="Generated" class="history-image">
-                </div>
-                <div class="card-body">
-                    <div class="card-date">Dec 28, 2024 • 9:00 AM</div>
-                    <div class="card-title">Product Shot Yaw</div>
-                    <div class="card-actions">
-                        <button class="history-btn btn-download"
-                            onclick="downloadImage('https://picsum.photos/300/200?random=3')">
-                            <i class="fas fa-download"></i>
-                        </button>
-                        <button class="history-btn btn-edit"
-                            onclick="editAgain('https://picsum.photos/300/200?random=3')">
-                            Edit Again
-                        </button>
-                    </div>
-                </div>
-            </div>
-
+            <!-- Dynamic History Cards will be injected here -->
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="routes/api.js"></script>
+    <script src="routes/auth.js"></script>
+    <script src="routes/images.js"></script>
     <script src="js/theme.js"></script>
     <script>
         function toggleDropdown() {
@@ -138,6 +82,91 @@
         // --- HISTORY PAGE LOGIC ---
 
         // 1. Download Functionality
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async () => {
+            initUser();
+            loadHistory();
+        });
+
+        async function initUser() {
+            try {
+                const userData = await AuthAPI.getCurrentUser();
+                const user = userData.data.user || userData.data || userData;
+
+                const navUsername = document.getElementById('navUsername');
+                const headerCredits = document.getElementById('headerCredits');
+
+                if (navUsername) navUsername.innerText = user.username || user.fullName || 'User';
+                if (headerCredits) {
+                    const limit = user.subscription && user.subscription.limit ? user.subscription.limit : 5;
+                    headerCredits.innerText = `${user.credits || 0} / ${limit}`;
+                }
+
+                const navAvatar = document.getElementById('navAvatar');
+                const avatarUrl = user.avatar || user.avatarUrl;
+                if (navAvatar && avatarUrl && typeof avatarUrl === 'string' && avatarUrl.trim() !== '') {
+                    navAvatar.style.backgroundImage = `url('${avatarUrl}')`;
+                    navAvatar.style.backgroundSize = 'cover';
+                }
+            } catch (error) {
+                console.error("Failed to load user:", error);
+            }
+        }
+
+        async function loadHistory() {
+            const grid = document.querySelector('.history-grid');
+            if (!grid) return;
+
+            grid.innerHTML = '<p style="color:white;">Loading history...</p>';
+
+            try {
+                const response = await ImageAPI.getHistory();
+                // Expecting response.data.history or response.data which is an array
+                const historyList = response.data.history || response.data || [];
+
+                grid.innerHTML = '';
+
+                if (historyList.length === 0) {
+                    grid.innerHTML = '<p style="color:var(--text-muted); padding: 20px;">No generation history found. Start creating!</p>';
+                    return;
+                }
+
+                historyList.forEach(item => {
+                    // item: { _id, originalImageUrl, transformedImageUrl, createdAt, parameters: { pitch, yaw, roll }, ... }
+
+                    const date = new Date(item.createdAt).toLocaleString();
+                    const title = `Pitch: ${item.parameters.pitch}, Yaw: ${item.parameters.yaw}, Roll: ${item.parameters.roll}`;
+                    const imgUrl = item.transformedImageUrl;
+
+                    const card = document.createElement('div');
+                    card.className = 'history-card';
+                    card.innerHTML = `
+                        <div class="card-img">
+                            <img src="${imgUrl}" alt="Generated" class="history-image" onerror="this.src='/api/placeholder/400/320'">
+                        </div>
+                        <div class="card-body">
+                            <div class="card-date">${date}</div>
+                            <div class="card-title" style="font-size: 0.9em;">${title}</div>
+                            <div class="card-actions">
+                                <button class="history-btn btn-download" onclick="downloadImage('${imgUrl}')">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                                <button class="history-btn btn-edit" onclick="editAgain('${imgUrl}')">
+                                    Edit Again
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+
+            } catch (error) {
+                console.error("Failed to load history:", error);
+                grid.innerHTML = `<p style="color:var(--text-red);">Failed to load history: ${getErrorMessage(error)}</p>`;
+            }
+        }
+
+        // 1. Download Functionality
         async function downloadImage(url) {
             try {
                 // Fetch the image as a blob to force download instead of nav
@@ -147,14 +176,14 @@
 
                 const link = document.createElement('a');
                 link.href = blobUrl;
-                link.download = `shift-image-${Date.now()}.jpg`;
+                link.download = `shift-image-${Date.now()}.png`; // png or jpg based on content-type usually
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
                 window.URL.revokeObjectURL(blobUrl);
             } catch (error) {
                 console.error("Download failed:", error);
-                // Fallback for simple images
+                // Fallback
                 const link = document.createElement('a');
                 link.href = url;
                 link.download = 'download';

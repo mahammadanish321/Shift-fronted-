@@ -57,11 +57,20 @@ async function initUser() {
         const headerCredits = document.getElementById('headerCredits');
 
         if (navUsername) navUsername.textContent = user.username || user.fullName || 'User';
-        if (headerCredits) headerCredits.innerText = `${user.credits || 0} / ${user.subscription ? user.subscription.limit : 0}`; // Adjust based on actual response
+        if (headerCredits) {
+            const limit = user.subscription && user.subscription.limit ? user.subscription.limit : 5;
+            // If limit is 0 (e.g. error or no plan data), maybe just show credits? 
+            // User asked for "5/5", so let's stick to credits/limit format.
+            headerCredits.innerText = `${user.credits || 0} / ${limit}`;
+        }
 
-        // Optionally update avatar if exists
-        // const navAvatar = document.getElementById('navAvatar');
-        // if (user.avatarUrl) navAvatar.style.backgroundImage = `url(${user.avatarUrl})`;
+        // Update Avatar
+        const navAvatar = document.getElementById('navAvatar');
+        const avatarUrl = user.avatar || user.avatarUrl;
+        if (navAvatar && avatarUrl && typeof avatarUrl === 'string' && avatarUrl.trim() !== '') {
+            navAvatar.style.backgroundImage = `url('${avatarUrl}')`;
+            navAvatar.style.backgroundSize = 'cover';
+        }
 
     } catch (error) {
         console.error("Failed to fetch user:", error);
@@ -134,9 +143,14 @@ document.body.addEventListener('drop', (e) => {
     const files = dt.files;
 
     if (files.length > 0 && files[0].type.startsWith('image/')) {
+        // Increased limit for home page transform as requested (e.g. 15MB)
+        if (files[0].size > 15 * 1024 * 1024) {
+            showToast("File size exceeds 15MB limit.", 'error');
+            return;
+        }
         loadImage(files[0]);
     } else {
-        alert("Please drop a valid image file.");
+        showToast("Please drop a valid image file.", 'error');
     }
 });
 
@@ -267,7 +281,7 @@ if (removeBtn) removeBtn.addEventListener('click', () => {
 // Apply
 if (applyBtn) applyBtn.addEventListener('click', async () => {
     if (!currentFile) {
-        alert("Please upload an image first.");
+        showToast("Please upload an image first.", 'error');
         return;
     }
 
@@ -282,6 +296,8 @@ if (applyBtn) applyBtn.addEventListener('click', async () => {
         formData.append('pitch', state.pitch);
         formData.append('yaw', state.yaw);
         formData.append('roll', state.rot);
+        formData.append('moveX', state.x);
+        formData.append('moveY', state.y);
 
         const blob = await ImageAPI.transform(formData);
 
@@ -297,7 +313,7 @@ if (applyBtn) applyBtn.addEventListener('click', async () => {
 
     } catch (error) {
         console.error("Transformation failed:", error);
-        alert(getErrorMessage(error)); // Using utility from api.js
+        showToast(getErrorMessage(error), 'error'); // Using utility from api.js
     } finally {
         applyBtn.innerText = originalText;
         applyBtn.style.opacity = "1";

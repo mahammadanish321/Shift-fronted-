@@ -113,9 +113,57 @@ api.interceptors.response.use(
 );
 
 // Utility function for error messages
+// Utility function for error messages
 function getErrorMessage(error) {
-    if (error.response && error.response.data && error.response.data.message) {
-        return error.response.data.message;
+    if (error.response) {
+        // If response is not JSON (likely HTML error page from server crash/proxy)
+        const contentType = error.response.headers['content-type'];
+        if (contentType && !contentType.includes('application/json')) {
+            if (error.response.status === 404) return "Resource not found (404).";
+            if (error.response.status === 500) return "Server error. Please try again later.";
+            if (error.response.status === 502) return "Bad Gateway. Server might be restarting.";
+            if (error.response.status === 503) return "Service unavailable.";
+            return `Server Error (${error.response.status})`;
+        }
+
+        // Using backend provided message
+        if (error.response.data && error.response.data.message) {
+            return error.response.data.message;
+        }
     }
+
+    // Network Error
+    if (error.message === 'Network Error') {
+        return "Unable to connect to server. Please check your internet connection.";
+    }
+
     return error.message || 'An unexpected error occurred.';
 }
+
+// --- GLOBAL NOTIFICATION SYSTEM ---
+window.showToast = function (message, type = 'info') {
+    let container = document.getElementById('toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'toast-container';
+        document.body.appendChild(container);
+    }
+
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+
+    // Icon based on type
+    let icon = '<i class="fas fa-info-circle" style="color:var(--accent-blue)"></i>';
+    if (type === 'success') icon = '<i class="fas fa-check-circle" style="color:#4caf50"></i>';
+    if (type === 'error') icon = '<i class="fas fa-exclamation-circle" style="color:var(--accent-red)"></i>';
+
+    toast.innerHTML = `${icon}<span>${message}</span>`;
+
+    container.appendChild(toast);
+
+    // Remove after 3 seconds
+    setTimeout(() => {
+        toast.style.animation = 'fadeOut 0.3s forwards';
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+};

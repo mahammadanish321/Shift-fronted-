@@ -68,5 +68,23 @@ const AuthAPI = {
         } catch (error) {
             throw error;
         }
+    },
+
+    /**
+     * Updates user account details.
+     * @param {FormData} userData - Form data containing fullName, email, avatar, coverImage.
+     * @returns {Promise} Axios response data
+     */
+    updateAccount: async (userData) => {
+        try {
+            const response = await api.patch('/users/update-account', userData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
     }
 };
