@@ -35,6 +35,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Create FormData as per backend requirement
                 const formData = new FormData();
+
+                // Validate Email
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    showError("Please enter a valid email address.");
+                    submitBtn.textContent = originalBtnText;
+                    submitBtn.disabled = false;
+                    return;
+                }
+
                 formData.append('fullName', fullName);
                 formData.append('email', email);
                 formData.append('username', username);
@@ -58,4 +68,50 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // --- GOOGLE SIGN IN ---
+    // Handle the response from Google
+    window.handleGoogleLogin = async (response) => {
+        try {
+            const idToken = response.credential;
+            const res = await AuthAPI.googleLogin(idToken);
+
+            if (res.data && res.data.accessToken) {
+                localStorage.setItem('accessToken', res.data.accessToken);
+                if (res.data.user) {
+                    localStorage.setItem('user', JSON.stringify(res.data.user));
+                }
+
+                showToast("Account created with Google successfully!", 'success');
+                window.location.href = 'home.html';
+            }
+        } catch (error) {
+            console.error("Google Login Error:", error);
+            showToast(getErrorMessage(error), 'error');
+        }
+    };
+
+    // Initialize Google Button
+    const initGoogleBtn = () => {
+        if (typeof google !== 'undefined' && document.querySelector('.btn-google')) {
+            const btnContainer = document.querySelector('.btn-google');
+            btnContainer.innerHTML = '';
+            btnContainer.style.padding = '0';
+            btnContainer.style.border = 'none';
+            btnContainer.style.background = 'transparent';
+
+            google.accounts.id.initialize({
+                client_id: "426765358744-sc34cuq0dnoakmjcel4bdagjjstudmc3.apps.googleusercontent.com", // REPLACE THIS WITH ACTUAL CLIENT ID
+                callback: window.handleGoogleLogin
+            });
+            google.accounts.id.renderButton(
+                btnContainer,
+                { theme: "outline", size: "large", width: 320 } // Fixed width mostly safe
+            );
+        } else {
+            setTimeout(initGoogleBtn, 500);
+        }
+    };
+
+    initGoogleBtn();
 });

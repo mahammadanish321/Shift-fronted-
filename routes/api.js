@@ -113,28 +113,38 @@ api.interceptors.response.use(
 );
 
 // Utility function for error messages
-// Utility function for error messages
 function getErrorMessage(error) {
     if (error.response) {
-        // If response is not JSON (likely HTML error page from server crash/proxy)
-        const contentType = error.response.headers['content-type'];
-        if (contentType && !contentType.includes('application/json')) {
-            if (error.response.status === 404) return "Resource not found (404).";
-            if (error.response.status === 500) return "Server error. Please try again later.";
-            if (error.response.status === 502) return "Bad Gateway. Server might be restarting.";
-            if (error.response.status === 503) return "Service unavailable.";
-            return `Server Error (${error.response.status})`;
+        // Context-aware Handling
+        const url = error.config ? error.config.url : '';
+        const status = error.response.status;
+
+        // Login Specific Errors
+        if (url.includes('/auth/login') || url.includes('/login')) {
+            if (status === 404) return "Account not found. Please sign up.";
+            if (status === 401) return "Incorrect username or password.";
         }
 
-        // Using backend provided message
+        // Backend provided message (if JSON)
         if (error.response.data && error.response.data.message) {
             return error.response.data.message;
         }
+
+        // Fallback for HTML/Non-JSON responses or missing messages
+        if (status === 404) return "The requested resource was not found.";
+        if (status === 500) return "Something went wrong on our end. Please try again.";
+        if (status === 502) return "Server is warming up. Please try again.";
+        if (status === 503) return "Service unavailable at the moment.";
+        if (status === 401) return "Session expired. Please login again.";
+        if (status === 403) return "You don't have permission to perform this action.";
+        if (status === 413) return "File is too large to upload.";
+
+        return "An issue occurred. Please try again.";
     }
 
     // Network Error
     if (error.message === 'Network Error') {
-        return "Unable to connect to server. Please check your internet connection.";
+        return "Unable to connect. Please check your internet connection.";
     }
 
     return error.message || 'An unexpected error occurred.';
@@ -158,7 +168,6 @@ window.showToast = function (message, type = 'info') {
     if (type === 'error') icon = '<i class="fas fa-exclamation-circle" style="color:var(--accent-red)"></i>';
 
     toast.innerHTML = `${icon}<span>${message}</span>`;
-
     container.appendChild(toast);
 
     // Remove after 3 seconds

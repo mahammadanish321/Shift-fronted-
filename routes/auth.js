@@ -41,6 +41,24 @@ const AuthAPI = {
     },
 
     /**
+     * Logs in or Registers via Google.
+     * @param {string} idToken - The Google ID Token.
+     * @returns {Promise} Axios response data
+     */
+    googleLogin: async (idToken) => {
+        try {
+            const response = await api.post('/users/google-login', { idToken }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    /**
      * Gets current user profile.
      * @returns {Promise} Axios response data
      */

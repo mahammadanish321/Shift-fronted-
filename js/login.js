@@ -6,12 +6,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Check query params for success message (e.g. from signup)
     const urlParams = new URLSearchParams(window.location.search);
+
     if (urlParams.get('registered') === 'true') {
-        errorMessageDiv.style.color = '#4caf50'; // Green for success
-        errorMessageDiv.style.background = 'rgba(76, 175, 80, 0.1)';
-        errorMessageDiv.style.borderColor = 'rgba(76, 175, 80, 0.3)';
-        errorMessageDiv.textContent = 'Account created successfully! Please login.';
-        errorMessageDiv.style.display = 'block';
+        // Clear param to avoid showing toast on reload? Optional, but good UX.
+        // For now, just show toast.
+        // Wait a small delay to ensure toast container is ready if script runs fast? 
+        // DOMContentLoaded handles it.
+        setTimeout(() => {
+            showToast("Account created successfully! Please login.", 'success');
+        }, 300);
     }
 
     // Helper to show error
@@ -75,4 +78,53 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // --- GOOGLE SIGN IN ---
+    // Handle the response from Google
+    window.handleGoogleLogin = async (response) => {
+        try {
+            const idToken = response.credential;
+            const res = await AuthAPI.googleLogin(idToken);
+
+            if (res.data && res.data.accessToken) {
+                localStorage.setItem('accessToken', res.data.accessToken);
+                if (res.data.user) {
+                    localStorage.setItem('user', JSON.stringify(res.data.user));
+                }
+
+                showToast("Logged in with Google successfully!", 'success');
+                window.location.href = 'home.html';
+            }
+        } catch (error) {
+            console.error("Google Login Error:", error);
+            showToast(getErrorMessage(error), 'error');
+        }
+    };
+
+    // Initialize Google Button
+    const initGoogleBtn = () => {
+        if (typeof google !== 'undefined' && document.querySelector('.btn-google')) {
+            const btnContainer = document.querySelector('.btn-google');
+            // Clear existing content (custom icon/text)
+            btnContainer.innerHTML = '';
+            // Remove padding/border from our custom class to let Google button fill it nicely
+            btnContainer.style.padding = '0';
+            btnContainer.style.border = 'none';
+            btnContainer.style.background = 'transparent';
+
+            google.accounts.id.initialize({
+                client_id: "426765358744-sc34cuq0dnoakmjcel4bdagjjstudmc3.apps.googleusercontent.com",
+                callback: window.handleGoogleLogin
+            });
+            google.accounts.id.renderButton(
+                btnContainer,
+                { theme: "outline", size: "large", width: btnContainer.offsetWidth } // approximate width
+            );
+        } else {
+            // Retry if script not loaded yet
+            setTimeout(initGoogleBtn, 500);
+        }
+    };
+
+    initGoogleBtn();
 });
