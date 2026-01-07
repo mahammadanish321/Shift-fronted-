@@ -7,8 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const saveProfileBtn = document.getElementById('saveProfileBtn');
 
     // Inputs
+    // Inputs
     const editNameIn = document.getElementById('editName');
-    const editHandleIn = document.getElementById('editHandle');
     const avatarInput = document.getElementById('avatarInput');
     const coverInput = document.getElementById('coverInput');
 
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function openModal() {
         // Pre-fill data
         editNameIn.value = profileName.innerText;
-        editHandleIn.value = profileHandle.innerText.replace('@', '');
+        // Handle no longer editable
 
         // Pre-fill images
         if (profileAvatar) {
@@ -135,20 +135,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Initial Logic ---
     loadUserProfile();
 
-    // ... (rest of profile loading logic omitted for brevity as we are replacing chunks, but wait, replace tool requires contiguous block. I'll split this up if needed or rely on targeting the first block first?
-    // The instructions say "Replace all". I should use multi_replace for this if I can, but I am using replace_content.
-    // I will replace the main event listener block for file inputs first, then the save block.)
 
-    // ...
-    // Save Changes
     // Save Changes
     if (saveProfileBtn) {
         saveProfileBtn.addEventListener('click', async () => {
             const newName = editNameIn.value.trim();
-            const newUsername = editHandleIn.value.trim();
 
-            // Note: Email update is not in the modal currently, assuming just name/username/images for now per modal HTML
-            // Attempt to update whatever is present
+            // Note: Email update is not in the modal currently, assuming just name/images for now per modal HTML
 
             const originalBtnText = saveProfileBtn.innerText;
             saveProfileBtn.innerText = "Saving...";
@@ -157,20 +150,20 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const formData = new FormData();
                 if (newName) formData.append('fullName', newName); // Backend expects fullName
-                if (newUsername) formData.append('username', newUsername); // Backend might expect username
 
                 // If user changed email, append it (but modal doesn't have email input yet, skipping)
 
                 if (newAvatarFile) formData.append('avatar', newAvatarFile);
                 if (newCoverFile) formData.append('coverImage', newCoverFile);
 
+
                 const response = await AuthAPI.updateAccount(formData);
                 const updatedUser = response.data.user || response.data || response;
 
                 // Update UI with new data
                 if (profileName) profileName.innerText = updatedUser.fullName || newName;
-                if (profileHandle) profileHandle.innerText = '@' + (updatedUser.username || newUsername);
-                if (navUsername) navUsername.innerText = updatedUser.fullName || newName;
+                if (profileHandle) profileHandle.innerText = '@' + (updatedUser.username || "username");
+                if (navUsername) navUsername.innerText = updatedUser.username || updatedUser.fullName || newName;
 
                 if (updatedUser.avatarUrl) {
                     if (profileAvatar) profileAvatar.src = updatedUser.avatarUrl;
@@ -230,7 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Update Text
             if (profileName) profileName.innerText = user.fullName || "User";
             if (profileHandle) profileHandle.innerText = '@' + (user.username || "username");
-            if (navUsername) navUsername.innerText = user.fullName || "User";
+            if (navUsername) navUsername.innerText = user.username || user.fullName || "User";
 
             if (profileCredits) profileCredits.innerText = `${user.credits || 0} / ${user.subscription ? user.subscription.limit : 5}`;
             if (profileEmail) profileEmail.innerText = user.email || "-";
