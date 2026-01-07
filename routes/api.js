@@ -3,7 +3,9 @@
 // Authentication: HttpOnly Cookies
 
 const api = axios.create({
-    baseURL: 'http://localhost:8000/api/v1',
+    baseURL: (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+        ? 'http://localhost:8000/api/v1'
+        : '/api/v1',
     withCredentials: true // Required for HttpOnly Cookies
 });
 

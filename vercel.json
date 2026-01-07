@@ -1,0 +1,10 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/v1/(.*)",
+      "destination": "https://YOUR_BACKEND_URL_HERE/api/v1/$1"
+    }
+  ],
+  "cleanUrls": false,
+  "trailingSlash": false
+}
