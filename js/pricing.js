@@ -103,8 +103,20 @@ async function initUser() {
 
         if (navUsername) navUsername.innerText = user.username || user.fullName || 'User';
         if (headerCredits) {
-            const limit = user.subscription && user.subscription.limit ? user.subscription.limit : 5;
-            headerCredits.innerText = `${user.credits || 0} / ${limit}`;
+            // Determine limit: Use subscription limit if exists, else default 5
+            let limit = user.subscription && typeof user.subscription.limit !== 'undefined'
+                ? user.subscription.limit
+                : 5;
+
+            // Fallback: If for some reason limit is default (5) but user has MORE credits (e.g. 50),
+            // it means the plan data is desynced. We should at least show 50/50, not 50/5.
+            if (user.credits > limit) {
+                limit = user.credits;
+            }
+
+            // user.credits is the "Available" amount.
+            // Display: "Available / Total Limit"
+            headerCredits.innerText = `${user.credits !== undefined ? user.credits : 0} / ${limit}`;
         }
 
         const navAvatar = document.getElementById('navAvatar');

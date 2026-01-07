@@ -225,27 +225,44 @@ document.addEventListener('DOMContentLoaded', () => {
             if (profileHandle) profileHandle.innerText = '@' + (user.username || "username");
             if (navUsername) navUsername.innerText = user.username || user.fullName || "User";
 
-            if (profileCredits) profileCredits.innerText = `${user.credits || 0} / ${user.subscription ? user.subscription.limit : 5}`;
-            if (profileEmail) profileEmail.innerText = user.email || "-";
+            // Display Credits
+            // Logic: user.credits is the "Available Balance"
+            let limit = user.subscription && typeof user.subscription.limit !== 'undefined' ? user.subscription.limit : 5;
+
+            // Fallback for missing plan data
+            if ((user.credits || 0) > limit) {
+                limit = user.credits;
+            }
+
+            if (profileCredits) profileCredits.innerText = `${user.credits || 0} / ${limit}`;
+
             if (headerCredits) {
-                const limit = user.subscription && user.subscription.limit ? user.subscription.limit : 5;
                 headerCredits.innerText = `${user.credits || 0} / ${limit}`;
             }
 
+            // Restore Email Display (accidentally removed in previous edit)
+            if (profileEmail) profileEmail.innerText = user.email || "-";
+
             // Display Plan
             if (profilePlan) {
-                // Prioritize planName if available from backend, otherwise planId
-                let planName = "Free";
-                if (user.subscription) {
-                    if (user.subscription.planName) {
-                        planName = user.subscription.planName;
-                    } else if (user.subscription.planId) {
-                        planName = user.subscription.planId;
-                    }
+                // Check subscription status
+                let planId = (user.subscription && user.subscription.planId) ? user.subscription.planId.toLowerCase() : 'free';
+
+                // Map common IDs to display names if needed, or just capitalize
+                let planDisplay = planId.charAt(0).toUpperCase() + planId.slice(1);
+
+                // Special check: If planId is missing but they have credits, it's effectively Free
+                if (!planId) planDisplay = "Free";
+
+                // *** Plan Inference Fallback ***
+                // If the backend says "Free" (or missing) but the user clearly has a paid limit (e.g. 50 or 200),
+                // we should display the correct plan name to avoid confusion (e.g. "50/50" credits but "Free" plan).
+                if (planDisplay === "Free") {
+                    if (limit === 50) planDisplay = "Basic";
+                    if (limit === 200) planDisplay = "Pro";
                 }
 
-                // Capitalize first letter
-                profilePlan.innerText = planName.charAt(0).toUpperCase() + planName.slice(1);
+                profilePlan.innerText = planDisplay;
             }
 
             // Update Images

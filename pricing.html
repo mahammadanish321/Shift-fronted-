@@ -155,7 +155,15 @@
                 // Fetch current user to update button states
                 const userData = await AuthAPI.getCurrentUser();
                 const user = userData.data.user || userData.data;
-                const currentPlan = user.subscription && user.subscription.planId ? user.subscription.planId.toLowerCase() : 'free';
+                let currentPlan = user.subscription && user.subscription.planId ? user.subscription.planId.toLowerCase() : 'free';
+
+                // Fallback inference if backend says Free but credits indicate otherwise
+                const limit = user.subscription && typeof user.subscription.limit !== 'undefined' ? user.subscription.limit : 5;
+                // If limit matches known plan tiers, override "Free"
+                if (currentPlan === 'free') {
+                    if (limit === 50 || (user.credits && user.credits > 5 && user.credits <= 50)) currentPlan = 'basic';
+                    if (limit === 200 || (user.credits && user.credits > 50)) currentPlan = 'pro';
+                }
 
                 // Helper to set button state
                 const setButtonState = (planId, btnSelector) => {
