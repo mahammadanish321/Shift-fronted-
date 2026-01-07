@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // 2. Open Razorpay
                 const options = {
-                    "key": "rzp_test_S0DlVD4IpPotRr", // Hardcoded Key ID as per request
+                    "key": "rzp_live_S12NhipQwXU2iK", // Hardcoded Key ID as per request
                     "amount": orderData.amount,
                     "currency": orderData.currency || "INR",
                     "name": "Shift",
