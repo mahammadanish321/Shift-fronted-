@@ -182,7 +182,8 @@ main {
 
     /* Backdrop for popup */
     .controller-overlay {
-        /* ... existing overlay styles ... */
+        display: block;
+        /* Override default display: none */
         position: fixed;
         top: 0;
         left: 0;

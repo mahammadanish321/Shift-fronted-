@@ -149,6 +149,59 @@
     <!-- Page Logic -->
     <script src="js/pricing.js"></script>
     <script src="js/theme.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                // Fetch current user to update button states
+                const userData = await AuthAPI.getCurrentUser();
+                const user = userData.data.user || userData.data;
+                const currentPlan = user.subscription && user.subscription.planId ? user.subscription.planId.toLowerCase() : 'free';
+
+                // Helper to set button state
+                const setButtonState = (planId, btnSelector) => {
+                    const btn = document.querySelector(btnSelector);
+                    if (!btn) return;
+
+                    if (currentPlan === planId) {
+                        btn.innerText = "Current Plan";
+                        btn.disabled = true;
+                        btn.style.opacity = "0.6";
+                        btn.style.cursor = "default";
+                        btn.classList.add('current-plan-btn'); // optional hook for styling
+                    } else {
+                        // If user is on Pro, maybe disable Basic upgrade? 
+                        // For now just marking current plan is enough request scope.
+                    }
+                };
+
+                // Free Plan Button
+                setButtonState('free', '.btn-blue-outline');
+
+                // Basic Plan Button (data-plan="Basic")
+                // Note: The logic in pricing.js uses 'Basic' capitalized, backend usually uses 'basic' or planId. 
+                // We match loosely.
+                const basicBtn = document.querySelector('.btn-yellow');
+                if (basicBtn && (currentPlan === 'basic' || currentPlan === 'Basic')) {
+                    basicBtn.innerText = "Current Plan";
+                    basicBtn.disabled = true;
+                    basicBtn.style.opacity = "0.6";
+                    basicBtn.style.cursor = "default";
+                }
+
+                // Pro Plan Button
+                const proBtn = document.querySelector('.btn-red');
+                if (proBtn && (currentPlan === 'pro' || currentPlan === 'Pro')) {
+                    proBtn.innerText = "Current Plan";
+                    proBtn.disabled = true;
+                    proBtn.style.opacity = "0.6";
+                    proBtn.style.cursor = "default";
+                }
+
+            } catch (e) {
+                console.log("Could not fetch user for plan update", e);
+            }
+        });
+    </script>
 </body>
 
 </html>

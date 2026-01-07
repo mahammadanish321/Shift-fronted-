@@ -234,11 +234,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Display Plan
             if (profilePlan) {
-                // Assuming user.subscription.planId exists or check user.isPro etc.
-                // If detailed plan object is returned: user.subscription.planName
-                // Else fallback to "Free"
-                const planName = (user.subscription && user.subscription.planId) ? user.subscription.planId : "Free";
-                // Capitalize first letter if it's strictly lower case "free" or "pro"
+                // Prioritize planName if available from backend, otherwise planId
+                let planName = "Free";
+                if (user.subscription) {
+                    if (user.subscription.planName) {
+                        planName = user.subscription.planName;
+                    } else if (user.subscription.planId) {
+                        planName = user.subscription.planId;
+                    }
+                }
+
+                // Capitalize first letter
                 profilePlan.innerText = planName.charAt(0).toUpperCase() + planName.slice(1);
             }
 

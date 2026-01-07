@@ -175,22 +175,41 @@ if (yawIn) yawIn.addEventListener('input', (e) => {
 let isDragDot = false;
 let isDragDial = false;
 
-function startDial(e) { isDragDial = true; e.preventDefault(); }
-function startDot(e) { isDragDot = true; e.stopPropagation(); e.preventDefault(); }
+function startDial(e) { isDragDial = true; if (e.type === 'touchstart') e.preventDefault(); else e.preventDefault(); }
+function startDot(e) { isDragDot = true; e.stopPropagation(); if (e.type === 'touchstart') e.preventDefault(); else e.preventDefault(); }
 function stopDrag() { isDragDot = false; isDragDial = false; }
 
-if (dialRing) dialRing.addEventListener('mousedown', startDial);
-if (dot) dot.addEventListener('mousedown', startDot);
+if (dialRing) {
+    dialRing.addEventListener('mousedown', startDial);
+    dialRing.addEventListener('touchstart', startDial, { passive: false });
+}
+if (dot) {
+    dot.addEventListener('mousedown', startDot);
+    dot.addEventListener('touchstart', startDot, { passive: false });
+}
 document.addEventListener('mouseup', stopDrag);
+document.addEventListener('touchend', stopDrag);
 
-document.addEventListener('mousemove', (e) => {
+const handleMove = (e) => {
     if (!isDragDial && !isDragDot) return;
+
+    // Normalize coordinates for Mouse vs Touch
+    let clientX, clientY;
+    if (e.type.startsWith('touch')) {
+        clientX = e.touches[0].clientX;
+        clientY = e.touches[0].clientY;
+        // Prevent scrolling while dragging
+        if (e.cancelable) e.preventDefault();
+    } else {
+        clientX = e.clientX;
+        clientY = e.clientY;
+    }
 
     const rect = joyWrapper.getBoundingClientRect();
     const cx = rect.left + rect.width / 2;
     const cy = rect.top + rect.height / 2;
-    const dx = e.clientX - cx;
-    const dy = e.clientY - cy;
+    const dx = clientX - cx;
+    const dy = clientY - cy;
     const maxRadius = (rect.width / 2) - 20;
 
     if (isDragDial) {
@@ -217,7 +236,10 @@ document.addEventListener('mousemove', (e) => {
         dot.style.transform = `translate(calc(-50% + ${fx}px), calc(-50% + ${fy}px))`;
         updateReadout();
     }
-});
+};
+
+document.addEventListener('mousemove', handleMove);
+document.addEventListener('touchmove', handleMove, { passive: false });
 
 
 // =========================================
@@ -310,6 +332,33 @@ if (applyBtn) applyBtn.addEventListener('click', async () => {
         }
         if (resPlace) resPlace.style.display = 'none';
         if (resultActions) resultActions.style.display = 'flex';
+
+        // *** DYNAMIC CREDIT UPDATE ***
+        // We assume the backend successfully deducted a credit if we got a result.
+        const headerCredits = document.getElementById('headerCredits');
+        if (headerCredits) {
+            const parts = headerCredits.innerText.split('/');
+            if (parts.length === 2) {
+                let current = parseInt(parts[0].trim());
+                const total = parts[1].trim();
+                // Decrement if > 0
+                if (!isNaN(current) && current > 0) {
+                    current -= 1;
+                    headerCredits.innerText = `${current} / ${total}`;
+
+                    // Also attempt to update local storage so refresh persists it partially
+                    try {
+                        let user = JSON.parse(localStorage.getItem('user'));
+                        if (user) {
+                            user.credits = current;
+                            localStorage.setItem('user', JSON.stringify(user));
+                        }
+                    } catch (e) { }
+                }
+            }
+        }
+        // Force a background refresh of user data to be perfectly synced
+        initUser();
 
     } catch (error) {
         console.error("Transformation failed:", error);
