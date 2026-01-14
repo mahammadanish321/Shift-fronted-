@@ -1,6 +1,6 @@
 # Shift. | Reframing Reality
 
-![Shift Banner](https://via.placeholder.com/1200x500.png?text=Shift+Reframe+Reality)
+![Shift Banner](https://placehold.co/1200x500/1e1e1e/FFF?text=Shift+Reframe+Reality)
 
 > **The web-based AI tool that moves the camera _after_ the shot.**
 
@@ -85,13 +85,15 @@ Follow these steps to get a local copy of the frontend running on your machine.
 
 ## 📸 Screenshots
 
+<!-- Note: Replace these placeholder URLs with actual screenshots of your application -->
+
 | Landing Page | Editor Interface |
 |:---:|:---:|
-| ![Landing Page](https://via.placeholder.com/400x250?text=Landing+Page) | ![Editor](https://via.placeholder.com/400x250?text=Editor+Interface) |
+| ![Landing Page](https://placehold.co/400x250/2d2d2d/FFF?text=Landing+Page) | ![Editor](https://placehold.co/400x250/2d2d2d/FFF?text=Editor+Interface) |
 
 | Profile & History | Mobile View |
 |:---:|:---:|
-| ![Profile](https://via.placeholder.com/400x250?text=User+Profile) | ![Mobile](https://via.placeholder.com/400x250?text=Mobile+Responsive) |
+| ![Profile](https://placehold.co/400x250/2d2d2d/FFF?text=User+Profile) | ![Mobile](https://placehold.co/400x250/2d2d2d/FFF?text=Mobile+Responsive) |
 
 ## 🤝 Contributing
 
